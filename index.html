@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember Spice Co. | Tikka Masala Simmer Sauce</title>
+<meta name="description" content="Bold, slow-simmered tikka masala in a jar. No fillers. No shortcuts. Just bold taste in every jar.">
+<link rel="preload" href="assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/jar/jar_000.webp" as="image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <a href="#top" class="nav__logo" aria-label="Ember Spice Co.">
+    <span class="nav__mark">✺</span> EMBER SPICE CO.
+  </a>
+  <nav class="nav__links">
+    <a class="pill pill--ghost" href="#inside">What's inside</a>
+    <a class="pill pill--ghost" href="#recipes">Recipes</a>
+    <a class="pill pill--ghost" href="#story">Our story</a>
+    <a class="pill pill--gold" href="#buy">Buy now</a>
+  </nav>
+  <button class="nav__burger" aria-label="Menu" id="burger"><span></span><span></span></button>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero__sticky">
+    <div class="hero__bg"></div>
+
+    <p class="hero__caption hero__caption--tl">
+      Discover how our creamy tomato blend and authentic spices elevate every meal.
+    </p>
+
+    <div class="hero__titles">
+      <h1 class="hero__title is-active" data-step="0">A New Angle<br>of Flavor</h1>
+      <h1 class="hero__title" data-step="1">Unwrap the<br>Adventure</h1>
+      <h1 class="hero__title" data-step="2">A New Perspective<br>on Taste</h1>
+    </div>
+
+    <div class="hero__jar">
+      <canvas id="jarCanvas" width="600" height="1080" aria-hidden="true"></canvas>
+      <img class="hero__jar-fallback" src="assets/jar/jar_000.webp" alt="Ember Spice Co. Tikka Masala jar" id="jarFallback">
+    </div>
+
+    <p class="hero__caption hero__caption--br">
+      Slow-simmered. Small-batch. <br>Stirred, not rushed.<br>
+      <span class="hero__caption-sub">Est. 2026 · Made with fire</span>
+    </p>
+
+    <div class="hero__scroll">
+      <span></span> Scroll
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside" id="inside">
+  <div class="inside__text">
+    <div class="inside__top">
+      <h2 class="h-display">What's<br>Inside</h2>
+      <div class="dots"></div>
+      <p class="lead">Our tikka masala sauce is made with real ingredients for real flavor.</p>
+    </div>
+
+    <ol class="ingredients">
+      <li class="ingredient reveal">
+        <span class="ingredient__num">01</span>
+        <div>
+          <strong>Fire-roasted tomatoes</strong>
+          <p>For a sweet, rich base with a whisper of char.</p>
+        </div>
+      </li>
+      <li class="ingredient reveal">
+        <span class="ingredient__num">02</span>
+        <div>
+          <strong>Cream and butter</strong>
+          <p>For a smooth, velvety texture that coats every bite.</p>
+        </div>
+      </li>
+      <li class="ingredient reveal">
+        <span class="ingredient__num">03</span>
+        <div>
+          <strong>A signature spice blend</strong>
+          <p>Cumin, coriander, cardamom, and Kashmiri chili. Ground the morning we cook.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="inside__claim">
+      <p class="h-display reveal"><span class="stroke">No</span> fillers.</p>
+      <p class="h-display reveal"><span class="stroke">No</span> shortcuts.</p>
+      <p class="h-display h-gold reveal">Just bold taste<br>in every jar.</p>
+    </div>
+  </div>
+
+  <div class="inside__media">
+    <div class="inside__pink">
+      <img src="assets/hand-jar.jpg" alt="Hand holding a jar of Ember Spice Co. Tikka Masala" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- TRADITION & CREATION -->
+<section class="tradition" id="story">
+  <div class="tradition__head">
+    <h2 class="h-display reveal">Tradition<br>&amp; Creation</h2>
+    <p class="lead reveal">Every jar begins the way it always has: whole spices, a stone mortar, and a pot that never gets rushed. Then we bottle it so you don't have to.</p>
+  </div>
+
+  <div class="tradition__grid">
+    <figure class="tcard tcard--1 reveal">
+      <img src="assets/mortar.jpg" alt="Hands grinding whole spices in a stone mortar" loading="lazy">
+      <figcaption>
+        <span class="tcard__num">01</span>
+        <span>Ground by hand, every morning</span>
+      </figcaption>
+    </figure>
+    <figure class="tcard tcard--2 reveal">
+      <img src="assets/table.jpg" alt="Tikka masala served with rice next to a jar" loading="lazy">
+      <figcaption>
+        <span class="tcard__num">02</span>
+        <span>Simmered slow, poured into your kitchen</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- WHY THE JAR MATTERS -->
+<section class="why">
+  <div class="why__head">
+    <h2 class="h-display h-shadow reveal">Why the jar<br>matters</h2>
+    <p class="lead reveal">Ask the people who cook with it.</p>
+  </div>
+
+  <div class="reviews">
+    <article class="review reveal">
+      <header>
+        <span class="avatar">SK</span>
+        <div><strong>Sana K.</strong><small>Verified buyer</small></div>
+      </header>
+      <p>"Made chicken tikka on a Tuesday night in 20 minutes. My mother in law asked for the recipe. I did not tell her."</p>
+      <img src="assets/card-bowl.jpg" alt="Bowl of chicken tikka masala with rice" loading="lazy">
+    </article>
+    <article class="review reveal">
+      <header>
+        <span class="avatar">RD</span>
+        <div><strong>Rohan D.</strong><small>Verified buyer</small></div>
+      </header>
+      <p>"It actually tastes like something someone stood over a stove for. Thick, smoky, not sweet. Finally."</p>
+      <img src="assets/card-spoon.jpg" alt="Spoon lifting thick sauce out of a jar" loading="lazy">
+    </article>
+    <article class="review reveal">
+      <header>
+        <span class="avatar">MP</span>
+        <div><strong>Maya P.</strong><small>Verified buyer</small></div>
+      </header>
+      <p>"I keep two in the pantry at all times. One for me, one for whoever shows up hungry."</p>
+      <img src="assets/card-stack-dark.jpg" alt="Two jars stacked with green chilies and lime" loading="lazy">
+    </article>
+  </div>
+</section>
+
+<!-- UNLOCK -->
+<section class="unlock" id="buy">
+  <img class="unlock__bg" src="assets/spread.jpg" alt="" loading="lazy">
+  <div class="unlock__content">
+    <h2 class="h-display h-gold reveal">Unlock the<br>magic inside<br>the jar</h2>
+    <a href="#" class="pill pill--cream reveal">Buy now · $8.99</a>
+  </div>
+</section>
+
+<!-- RECIPES -->
+<section class="recipes" id="recipes">
+  <div class="recipes__head">
+    <span class="nav__mark nav__mark--lg">✺</span>
+    <h2 class="h-display h-gold reveal">Let's Get<br>Cooking</h2>
+    <a href="#" class="pill pill--ghost reveal">All recipes</a>
+  </div>
+
+  <div class="recipes__grid">
+    <article class="recipe reveal">
+      <img src="assets/card-bowl.jpg" alt="Easy chicken tandoori" loading="lazy">
+      <div class="recipe__meta"><span>25 min</span><span>Serves 4</span></div>
+      <h3>Easy Chicken Tandoori</h3>
+      <p>Marinate, sear, stir in a jar. Dinner before the rice is done.</p>
+    </article>
+    <article class="recipe reveal">
+      <img src="assets/table.jpg" alt="Chicken tikka masala with rice" loading="lazy">
+      <div class="recipe__meta"><span>20 min</span><span>Serves 4</span></div>
+      <h3>Chicken Tikka Masala with Rice</h3>
+      <p>The classic. Cream swirl, coriander, and a squeeze of lime.</p>
+    </article>
+    <article class="recipe reveal">
+      <img src="assets/spread.jpg" alt="Paneer tikka masala with rice" loading="lazy">
+      <div class="recipe__meta"><span>15 min</span><span>Serves 2</span></div>
+      <h3>Paneer Tikka Masala with Rice</h3>
+      <p>Golden cubes of paneer, a full jar, and nothing else to think about.</p>
+    </article>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="news">
+  <div class="news__form">
+    <h2 class="h-display reveal">Flavor-packed updates straight into your inbox + 10% off your first jar.</h2>
+    <form class="form reveal" onsubmit="event.preventDefault(); this.querySelector('button').textContent='You\'re in ✺';">
+      <label>
+        <span>Enter your full name</span>
+        <input type="text" name="name" placeholder="Priya Sharma" required>
+      </label>
+      <label>
+        <span>Enter your email</span>
+        <input type="email" name="email" placeholder="priya@email.com" required>
+      </label>
+      <button type="submit" class="pill pill--dark">Subscribe</button>
+      <small>By signing up you agree to our privacy policy. No spam, only sauce.</small>
+    </form>
+  </div>
+  <div class="news__pink">
+    <img src="assets/card-stack-warm.jpg" alt="Stacked jars of tikka masala" loading="lazy">
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__word" aria-hidden="true">HUNGRY</div>
+  <div class="footer__cols">
+    <div>
+      <strong>Shop</strong>
+      <a href="#buy">Tikka Masala</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#story">Our story</a>
+    </div>
+    <div>
+      <strong>Help</strong>
+      <a href="#">Where to buy</a>
+      <a href="#">Contact</a>
+      <a href="#">Wholesale</a>
+    </div>
+    <div>
+      <strong>Legal</strong>
+      <a href="#">Privacy policy</a>
+      <a href="#">Terms of use</a>
+      <a href="#">Shipping</a>
+    </div>
+    <div>
+      <strong>Follow</strong>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">hello@emberspice.co</a>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 Ember Spice Co.</span>
+    <span class="nav__mark">✺</span>
+    <span>Made with fire</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
