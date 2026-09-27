@@ -11,9 +11,9 @@
 */
 (function () {
   /* ---- config ---- */
-  const FRAME_COUNT = 106;          // files in assets/jar/
-  const SEQUENCE = 'pingpong';      // 'loop' for a seamless 360 clip, 'pingpong' otherwise
-  const FRAMES_PER_100VH = 60;      // rotation speed: frames advanced per screen of scroll
+  const FRAME_COUNT = 168;          // files in assets/jar/
+  const SEQUENCE = 'loop';          // 'loop' = seamless 360 clip, 'pingpong' = clip that doesn't loop
+  const FRAMES_PER_100VH = 84;      // rotation speed: frames advanced per screen of scroll
   const SMOOTHING = 0.08;           // lerp factor (lower = floatier)
   const STATION_GAP = 200;          // vh between headline stations
   const RUNWAY = 500;               // vh of scroll inside the hero (600vh - 100vh)
