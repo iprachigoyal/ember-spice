@@ -1,53 +1,46 @@
-/* Ember Spice Co. · scroll-driven jar rotation + reveals
+/* Ember Spice Co. · scroll-driven jar hero + reveals
    ---------------------------------------------------------
    HOW THE HERO WORKS
-   - The hero section is tall (600vh). Its inner box is position: sticky,
-     so the screen "holds" while you scroll through the runway.
-   - Scroll position -> progress 0..1 -> a frame of the jar image sequence.
-   - Progress is lerped every animation frame, so fast scrolls stay smooth
-     and the jar never jumps.
-   - Headlines are split into words; each word slides up from below when its
-     step becomes active, and up-and-out when the step is past.
+   - .hero is 600vh tall. The background and the jar are position: sticky,
+     so they stay on screen while the headlines scroll past like normal
+     page content (that's the "page going down" feel).
+   - Three headline stations sit at 0, 200vh and 400vh in the runway.
+   - Scroll -> smoothed scroll value -> a frame of the jar image sequence.
+   - Between stations the jar lifts away (up + smaller), then drops back
+     into the center (down + bigger) as the next headline slides up.
 */
 (function () {
   /* ---- config ---- */
   const FRAME_COUNT = 106;          // files in assets/jar/
-  const SEQUENCE = 'pingpong';      // 'loop' for a seamless 360 clip, 'pingpong' for a clip that doesn't loop
-  const TURNS = 2;                  // how many times the sequence plays across the hero runway
-  const SMOOTHING = 0.085;          // lerp factor (lower = floatier, higher = snappier)
+  const SEQUENCE = 'pingpong';      // 'loop' for a seamless 360 clip, 'pingpong' otherwise
+  const FRAMES_PER_100VH = 60;      // rotation speed: frames advanced per screen of scroll
+  const SMOOTHING = 0.1;            // lerp factor (lower = floatier)
+  const STATION_GAP = 200;          // vh between headline stations
+  const RUNWAY = 500;               // vh of scroll inside the hero (600vh - 100vh)
   const framePath = (i) => `assets/jar/jar_${String(i).padStart(3, '0')}.webp`;
 
-  // per-step jar placement: x/y in vw/vh offsets, s = scale, r = extra tilt in deg
-  const JAR_POSE = [
-    { x: 12,  y: 2,  s: 1.00, r: 0 },
-    { x: 0,   y: 4,  s: 1.06, r: 0 },
-    { x: -14, y: 0,  s: 0.98, r: 0 },
-  ];
-  const MOBILE_POSE = [
-    { x: 0, y: 0, s: 1, r: 0 },
-    { x: 0, y: 0, s: 1, r: 0 },
-    { x: 0, y: 0, s: 1, r: 0 },
-  ];
+  // horizontal placement per station (vw). Headline 0 is left, so jar goes right, etc.
+  const STATION_X = [12, 0, -14];
+  const LIFT_Y = -34;               // vh the jar lifts between stations
+  const LIFT_S = 0.5;               // scale at the top of the lift
 
   const hero = document.querySelector('.hero');
+  const bg = document.querySelector('.hero__bg');
   const canvas = document.getElementById('jarCanvas');
   const jarWrap = document.getElementById('jarWrap');
   const steps = Array.from(document.querySelectorAll('.hero__step'));
   const dots = Array.from(document.querySelectorAll('.hero__dots span'));
-  const scrollHint = document.querySelector('.hero__scroll');
   const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = () => window.innerWidth < 640;
 
   if (!ctx) document.documentElement.classList.add('no-canvas');
 
   /* ---- split headline words for the rise animation ---- */
   document.querySelectorAll('.hero__title').forEach((title) => {
-    const html = title.innerHTML.trim().split(/<br\s*\/?>/i);
     let i = 0;
-    title.innerHTML = html.map((line) =>
-      line.trim().split(/\s+/).map((word) =>
-        `<span class="w"><span style="--i:${i++}">${word}</span></span>`
-      ).join(' ')
+    title.innerHTML = title.innerHTML.trim().split(/<br\s*\/?>/i).map((line) =>
+      line.trim().split(/\s+/).map((word) => `<span class="w"><span style="--i:${i++}">${word}</span></span>`).join(' ')
     ).join('<br>');
   });
 
@@ -59,7 +52,6 @@
     if (i === 0) img.onload = () => draw(0);
     frames.push(img);
   }
-
   let drawn = -1;
   function draw(index) {
     if (!ctx) return;
@@ -67,75 +59,86 @@
     if (!img || !img.complete || !img.naturalWidth || index === drawn) return;
     drawn = index;
     if (canvas.width !== img.naturalWidth || canvas.height !== img.naturalHeight) {
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
+      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
   }
 
-  /* ---- map progress -> frame ---- */
-  function frameFor(p) {
-    const t = (p * TURNS) % 1;                    // position inside the current turn
-    if (SEQUENCE === 'loop') return Math.floor(t * FRAME_COUNT) % FRAME_COUNT;
-    // pingpong: 0..N-1..0
-    const span = FRAME_COUNT - 1;
-    const k = t * 2 * span;
-    return Math.round(k <= span ? k : 2 * span - k);
+  /* ---- scroll (in vh) -> frame ---- */
+  function frameFor(vh) {
+    const k = vh / 100 * FRAMES_PER_100VH;
+    if (SEQUENCE === 'loop') return Math.floor(k) % FRAME_COUNT;
+    const span = FRAME_COUNT - 1;                 // pingpong 0..N-1..0
+    const m = k % (2 * span);
+    return Math.round(m <= span ? m : 2 * span - m);
+  }
+
+  /* ---- easing helpers ---- */
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp01 = (t) => Math.min(1, Math.max(0, t));
+  const easeIn = (t) => t * t * t;
+  const easeOutBack = (t) => { const c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+  const smooth = (t) => t * t * (3 - 2 * t);
+
+  /* jar pose for a scroll position (vh):
+     hold at center around each station, lift away then drop back in between */
+  function pose(vh) {
+    const v = Math.min(vh, (STATION_X.length - 1) * STATION_GAP);   // after the last station: hold
+    const station = Math.floor(v / STATION_GAP);
+    const d = v - station * STATION_GAP;                             // 0..200 within the gap
+    let y = 0, s = 1, mix = 0;                                       // mix: 0 = this station, 1 = next
+    if (d > 60 && d <= 100) {                                        // lift away
+      const t = easeIn((d - 60) / 40);
+      y = LIFT_Y * t; s = lerp(1, LIFT_S, t); mix = smooth(t * 0.5);
+    } else if (d > 100 && d < 140) {                                 // drop back in
+      const t = clamp01((d - 100) / 40);
+      y = LIFT_Y * (1 - easeOutBack(t)); s = lerp(LIFT_S, 1, smooth(t)); mix = smooth(0.5 + t * 0.5);
+    } else if (d >= 140) { mix = 1; }
+    const xs = isMobile() ? [0, 0, 0] : STATION_X;
+    const x = lerp(xs[station], xs[Math.min(station + 1, xs.length - 1)], mix);
+    return { x, y, s, station: Math.round(v / STATION_GAP) };
   }
 
   /* ---- scroll -> target, lerp -> current ---- */
-  let target = 0, current = 0, lastStep = -1, running = false;
+  let target = 0, current = 0, running = false, lastStation = -1;
 
   function readScroll() {
-    const runway = hero.offsetHeight - window.innerHeight;
-    target = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / runway));
+    const top = -hero.getBoundingClientRect().top;
+    target = Math.min(RUNWAY, Math.max(0, top / window.innerHeight * 100));
     if (!running) { running = true; requestAnimationFrame(tick); }
   }
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
   function tick() {
     current = reduceMotion ? target : lerp(current, target, SMOOTHING);
-    if (Math.abs(target - current) < 0.0004) current = target;
+    if (Math.abs(target - current) < 0.02) current = target;
 
     draw(frameFor(current));
 
-    // headline step: 3 steps across the runway, last 8% of runway is "settle"
-    const step = Math.min(2, Math.floor(current * 3.2));
-    if (step !== lastStep) {
-      steps.forEach((el, i) => {
-        el.classList.toggle('is-active', i === step);
-        el.classList.toggle('is-past', i < step);
-      });
-      dots.forEach((d, i) => d.classList.toggle('on', i === step));
-      if (scrollHint) scrollHint.classList.toggle('hide', step > 0);
-      lastStep = step;
+    const p = pose(current);
+    jarWrap.style.transform = `translate(${p.x}vw, ${p.y}vh) scale(${p.s})`;
+    if (bg) bg.style.transform = `translateY(${current * 0.04}vh)`;   // slow parallax
+
+    if (p.station !== lastStation) {
+      dots.forEach((el, i) => el.classList.toggle('on', i === p.station));
+      lastStation = p.station;
     }
-
-    // jar drift: blend between poses so the jar glides, not jumps
-    const poses = window.innerWidth < 640 ? MOBILE_POSE : JAR_POSE;
-    const f = Math.min(2, current * 3.2);           // fractional step
-    const a = poses[Math.floor(f)], b = poses[Math.min(2, Math.ceil(f))];
-    const u = f - Math.floor(f);
-    const e = u * u * (3 - 2 * u);                  // smoothstep
-    const x = lerp(a.x, b.x, e), y = lerp(a.y, b.y, e), s = lerp(a.s, b.s, e);
-    jarWrap.style.transform = `translate(${x}vw, ${y}vh) scale(${s})`;
-
     if (current !== target) requestAnimationFrame(tick); else running = false;
   }
 
   window.addEventListener('scroll', readScroll, { passive: true });
   window.addEventListener('resize', readScroll);
   readScroll();
-  // make sure step 0 text animates in on load
-  requestAnimationFrame(() => { lastStep = -1; running = false; readScroll(); });
+
+  /* ---- headline stations: words rise when the station enters the viewport ---- */
+  const stepIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.3 });
+  steps.forEach((el) => stepIO.observe(el));
 
   /* ---- reveal on scroll ---- */
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 

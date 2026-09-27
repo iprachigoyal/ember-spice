@@ -28,35 +28,32 @@
 
 <!-- HERO -->
 <section class="hero" id="top">
-  <div class="hero__sticky">
-    <div class="hero__bg"></div>
+  <!-- pinned background -->
+  <div class="hero__pin hero__pin--bg"><div class="hero__bg"></div></div>
 
-    <!-- step 0 -->
-    <div class="hero__step" data-step="0">
-      <h1 class="hero__title hero__title--left">A New Angle<br>of Flavor</h1>
-      <p class="hero__caption hero__caption--bl">Discover how our creamy tomato blend and authentic spices elevate every meal.</p>
-    </div>
+  <!-- headlines scroll with the page (not pinned) -->
+  <div class="hero__step" data-step="0">
+    <h1 class="hero__title hero__title--left">A New Angle<br>of Flavor</h1>
+    <p class="hero__caption hero__caption--bl">Discover how our creamy tomato blend and authentic spices elevate every meal.</p>
+    <div class="hero__scroll"><span></span> Scroll</div>
+  </div>
+  <div class="hero__step" data-step="1">
+    <h1 class="hero__title hero__title--center">Unwrap the<br>Adventure</h1>
+    <p class="hero__caption hero__caption--br">Slow-simmered in small batches.<br>Stirred, not rushed.</p>
+  </div>
+  <div class="hero__step" data-step="2">
+    <h1 class="hero__title hero__title--right">A New<br>Perspective<br>on Taste</h1>
+    <p class="hero__caption hero__caption--tl">Fire-roasted tomatoes, cream, and a spice blend ground the morning we cook.</p>
+    <a href="#buy" class="pill pill--gold hero__cta">Buy now</a>
+  </div>
 
-    <!-- step 1 -->
-    <div class="hero__step" data-step="1">
-      <h1 class="hero__title hero__title--center">Unwrap the<br>Adventure</h1>
-      <p class="hero__caption hero__caption--br">Slow-simmered in small batches.<br>Stirred, not rushed.</p>
-    </div>
-
-    <!-- step 2 -->
-    <div class="hero__step" data-step="2">
-      <h1 class="hero__title hero__title--right">A New<br>Perspective<br>on Taste</h1>
-      <p class="hero__caption hero__caption--tl">Fire-roasted tomatoes, cream, and a spice blend ground the morning we cook.</p>
-      <a href="#buy" class="pill pill--gold hero__cta">Buy now</a>
-    </div>
-
+  <!-- pinned jar, in front of everything -->
+  <div class="hero__pin hero__pin--jar">
     <div class="hero__jar" id="jarWrap">
       <canvas id="jarCanvas" width="560" height="1080" aria-hidden="true"></canvas>
       <img class="hero__jar-fallback" src="assets/jar/jar_000.webp" alt="Ember Spice Co. Tikka Masala jar">
     </div>
-
     <div class="hero__dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="hero__scroll"><span></span> Scroll</div>
   </div>
 </section>
 
