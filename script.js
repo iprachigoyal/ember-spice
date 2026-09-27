@@ -6,23 +6,23 @@
      page content (that's the "page going down" feel).
    - Three headline stations sit at 0, 200vh and 400vh in the runway.
    - Scroll -> smoothed scroll value -> a frame of the jar image sequence.
-   - Between stations the jar lifts away (up + smaller), then drops back
-     into the center (down + bigger) as the next headline slides up.
+   - The jar stays centered and only tumbles; LIFT_Y / LIFT_S / STATION_X
+     are available if you ever want it to move between stations.
 */
 (function () {
   /* ---- config ---- */
   const FRAME_COUNT = 106;          // files in assets/jar/
   const SEQUENCE = 'pingpong';      // 'loop' for a seamless 360 clip, 'pingpong' otherwise
   const FRAMES_PER_100VH = 60;      // rotation speed: frames advanced per screen of scroll
-  const SMOOTHING = 0.1;            // lerp factor (lower = floatier)
+  const SMOOTHING = 0.08;           // lerp factor (lower = floatier)
   const STATION_GAP = 200;          // vh between headline stations
   const RUNWAY = 500;               // vh of scroll inside the hero (600vh - 100vh)
   const framePath = (i) => `assets/jar/jar_${String(i).padStart(3, '0')}.webp`;
 
   // horizontal placement per station (vw). Headline 0 is left, so jar goes right, etc.
-  const STATION_X = [12, 0, -14];
-  const LIFT_Y = -34;               // vh the jar lifts between stations
-  const LIFT_S = 0.5;               // scale at the top of the lift
+  const STATION_X = [0, 0, 0];      // jar stays centered (set e.g. [12, 0, -14] to drift)
+  const LIFT_Y = 0;                 // vh the jar lifts between stations (0 = stays put)
+  const LIFT_S = 1;                 // scale at the top of the lift (1 = no scaling)
 
   const hero = document.querySelector('.hero');
   const bg = document.querySelector('.hero__bg');
@@ -78,7 +78,7 @@
   const lerp = (a, b, t) => a + (b - a) * t;
   const clamp01 = (t) => Math.min(1, Math.max(0, t));
   const easeIn = (t) => t * t * t;
-  const easeOutBack = (t) => { const c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+  const easeOutBack = (t) => 1 - Math.pow(1 - t, 3);
   const smooth = (t) => t * t * (3 - 2 * t);
 
   /* jar pose for a scroll position (vh):
