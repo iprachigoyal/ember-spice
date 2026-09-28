@@ -201,7 +201,7 @@ a { color: inherit; text-decoration: none; }
   display: grid; place-items: center;
   will-change: transform;
 }
-.hero__jar canvas { height: 76vh; width: auto; max-width: 92vw; filter: drop-shadow(0 14px 14px rgba(40,12,0,.28)); }
+.hero__jar canvas { height: 76vh; width: auto; max-width: 92vw; }
 .hero__jar-fallback { display: none; height: 60vh; width: auto; }
 .no-canvas .hero__jar canvas { display: none; }
 .no-canvas .hero__jar-fallback { display: block; }
