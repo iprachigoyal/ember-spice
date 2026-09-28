@@ -17,7 +17,8 @@
   const SMOOTHING = 0.08;           // lerp factor (lower = floatier)
   const STATION_GAP = 200;          // vh between headline stations
   const RUNWAY = 500;               // vh of scroll inside the hero (600vh - 100vh)
-  const framePath = (i) => `assets/jar/jar_${String(i).padStart(3, '0')}.webp`;
+  const FRAMES_VERSION = 3;         // bump when frames are regenerated (busts browser cache)
+  const framePath = (i) => `assets/jar/jar_${String(i).padStart(3, '0')}.webp?v=${FRAMES_VERSION}`;
 
   // horizontal placement per station (vw). Headline 0 is left, so jar goes right, etc.
   const STATION_X = [0, 0, 0];      // jar stays centered (set e.g. [12, 0, -14] to drift)
