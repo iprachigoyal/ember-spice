@@ -12,8 +12,8 @@
 @font-face { font-family: 'DM Mono'; font-weight: 500; font-display: swap; src: url('assets/fonts/dm-mono-latin-500-normal.woff2') format('woff2'); }
 
 :root {
-  --orange: #b35e31;
-  --orange-deep: #8f4b27;
+  --orange: #b96235;
+  --orange-deep: #944e2a;
   --brown: #1f1410;
   --brown-2: #2a1a12;
   --cream: #f6e6c8;
@@ -153,7 +153,7 @@ a { color: inherit; text-decoration: none; }
 }
 .hero__bg::after {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(60% 60% at 50% 50%, rgba(179,94,49,0) 0%, rgba(125,65,34,0.45) 100%);
+  background: radial-gradient(60% 60% at 50% 50%, rgba(185,98,53,0) 0%, rgba(129,68,37,0.45) 100%);
 }
 
 /* headline stations: absolutely placed in the runway, so they scroll like page content */
@@ -174,9 +174,9 @@ a { color: inherit; text-decoration: none; }
 /* side headlines sit behind the centered jar, so cap their size until the longest line clears it:
    (half the viewport - jar half-width at that station's frame - gutter - gap) / longest line in em.
    Re-measure if the copy or the jar frames change. Current frames (800x1075 @ 76vh):
-   station 0 upright jar ≈ 16.8vh, "A NEW ANGLE" ≈ 4.85em; station 2 tilted jar ≈ 17.3vh, "PERSPECTIVE" ≈ 4.68em. */
-.hero__title--left   { font-size: clamp(40px, calc((48vw - 18vh - var(--gutter)) / 4.9), min(10.5vw, 168px)); }
-.hero__title--right  { font-size: clamp(40px, calc((48vw - 19vh - var(--gutter)) / 4.75), min(10.5vw, 168px)); }
+   station 0 upright jar ≈ 16.2vh, "A NEW ANGLE" ≈ 4.85em; station 2 tilted jar ≈ 23.4vh, "PERSPECTIVE" ≈ 4.68em. */
+.hero__title--left   { font-size: clamp(40px, calc((48vw - 17.5vh - var(--gutter)) / 4.9), min(10.5vw, 168px)); }
+.hero__title--right  { font-size: clamp(40px, calc((48vw - 25vh - var(--gutter)) / 4.75), min(10.5vw, 168px)); }
 
 /* word-by-word rise when a station scrolls into view */
 .hero__title .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .04em; margin: 0 -.04em; }
