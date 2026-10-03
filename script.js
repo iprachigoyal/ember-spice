@@ -143,6 +143,17 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
+  /* ---- nav colour: switch to dark text while a light section is under the bar ---- */
+  const nav = document.querySelector('.nav');
+  const lightSections = Array.from(document.querySelectorAll('[data-light]'));
+  function updateNav() {
+    const y = 40; // sample point: middle of the nav bar
+    const onLight = lightSections.some((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom >= y; });
+    nav.classList.toggle('on-light', onLight);
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
   /* ---- mobile nav ---- */
   const burger = document.getElementById('burger');
   const links = document.querySelector('.nav__links');
